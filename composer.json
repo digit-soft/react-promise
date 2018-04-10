@@ -1,0 +1,32 @@
+{
+    "name": "digit-soft/react-promise",
+    "version": "0.1.0",
+    "description": "A wrapper around ReactPHP Promises with chain dependencies",
+    "keywords": ["digit-soft", "reactphp", "promise"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/digit-soft/react-promise/issues",
+        "source": "https://github.com/digit-soft/react-promise"
+    },
+    "authors": [
+        {
+            "name": "Digit",
+            "email": "digit.vova@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+            "disoft\\promise\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        },
+    }
+}
