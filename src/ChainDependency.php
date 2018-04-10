@@ -3,7 +3,7 @@
 namespace DigitSoft\Promise;
 
 /**
- * Class ChainDependency
+ * Class ChainDependency. Fully sync package.
  * @package DigitSoft\Promise
  */
 class ChainDependency implements ChainDependencyInterface
@@ -35,6 +35,9 @@ class ChainDependency implements ChainDependencyInterface
     public function getDependency($key, $defaultValue = null) {
         $key = $this->processKey($key);
         if(!$this->hasDependency($key)) return $defaultValue;
+        if(is_array($this->dependencies[$key]) && isset($this->dependencies[$key]['#value'])) {
+            return $this->dependencies[$key]['#value'];
+        }
         return $this->dependencies[$key];
     }
 
@@ -52,7 +55,7 @@ class ChainDependency implements ChainDependencyInterface
      * Set dependencies map.
      * That creates mapped dependency with type static::TYPE_DEFINED_ONLY
      * @param array $map
-     * @return $this
+     * @return ChainDependency
      */
     public function setMap($map = []) {
         $this->flush();
@@ -63,10 +66,72 @@ class ChainDependency implements ChainDependencyInterface
 
     /**
      * Flush dependencies
-     * @return $this
+     * @return ChainDependency
      */
     public function flush() {
         $this->dependencies = [];
+        return $this;
+    }
+
+    /**
+     * Set scenario to static::SCENARIO_OVERWRITE
+     * @return ChainDependency
+     */
+    public function scenarioOverwrite() {
+        return $this->setScenario(static::SCENARIO_OVERWRITE);
+    }
+
+    /**
+     * Set scenario to static::SCENARIO_WRITE_ONCE
+     * @return ChainDependency
+     */
+    public function scenarioWriteOnce() {
+        return $this->setScenario(static::SCENARIO_WRITE_ONCE);
+    }
+
+    /**
+     * Set scenario to static::SCENARIO_MERGE
+     * @return ChainDependency
+     */
+    public function scenarioMerge() {
+        return $this->setScenario(static::SCENARIO_MERGE);
+    }
+
+    /**
+     * Set scenario
+     * @param string $scenario
+     * @return ChainDependency
+     */
+    public function setScenario($scenario) {
+        $scenarios = [static::SCENARIO_OVERWRITE, static::SCENARIO_WRITE_ONCE, static::SCENARIO_MERGE];
+        if(in_array($scenario, $scenarios)) $this->scenario = $scenario;
+        return $this;
+    }
+
+    /**
+     * Set type to static::TYPE_ARBITRARY
+     * @return ChainDependency
+     */
+    public function typeArbitrary() {
+        return $this->setType(static::TYPE_ARBITRARY);
+    }
+
+    /**
+     * Set type to static::TYPE_DEFINED_ONLY
+     * @return ChainDependency
+     */
+    public function typeDefinedOnly() {
+        return $this->setType(static::TYPE_DEFINED_ONLY);
+    }
+
+    /**
+     * Set type
+     * @param string $type
+     * @return ChainDependency
+     */
+    public function setType($type) {
+        $types = [static::TYPE_DEFINED_ONLY, static::TYPE_ARBITRARY];
+        if(in_array($type, $types)) $this->type = $type;
         return $this;
     }
 
@@ -84,10 +149,11 @@ class ChainDependency implements ChainDependencyInterface
      * Add dependency
      * @param mixed  $value
      * @param string $key
-     * @return $this
+     * @return ChainDependency
      * @internal
      */
     protected function addDependencyInternal($value, $key) {
+        if(null === $value || null === $key) return $this;
         $key = $this->processKey($key);
         if($this->type === static::TYPE_DEFINED_ONLY && !array_key_exists($key, $this->dependencies)) return $this;
         switch ($this->scenario) {
@@ -97,7 +163,7 @@ class ChainDependency implements ChainDependencyInterface
             case static::SCENARIO_WRITE_ONCE:
                 if(!isset($this->dependencies[$key])) $this->dependencies[$key] = $value;
                 break;
-            case static::SCENARIO_WRITE_MERGE:
+            case static::SCENARIO_MERGE:
                 if(!isset($this->dependencies[$key])) {
                     $this->dependencies[$key] = $value;
                 } elseif(isset($this->dependencies[$key]['#merged'])) {

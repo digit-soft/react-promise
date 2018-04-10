@@ -7,7 +7,7 @@ interface ChainDependencyInterface
 {
     const SCENARIO_WRITE_ONCE   = 'write_once';
     const SCENARIO_OVERWRITE    = 'write_overwrite';
-    const SCENARIO_WRITE_MERGE  = 'write_merge';
+    const SCENARIO_MERGE        = 'write_merge';
 
     const TYPE_DEFINED_ONLY     = 'defined';
     const TYPE_ARBITRARY        = 'arbitrary';
@@ -48,4 +48,49 @@ interface ChainDependencyInterface
      * @return $this
      */
     public function flush();
+
+
+    /**
+     * Set scenario to static::SCENARIO_OVERWRITE
+     * @return ChainDependency
+     */
+    public function scenarioOverwrite();
+
+    /**
+     * Set scenario to static::SCENARIO_WRITE_ONCE
+     * @return ChainDependency
+     */
+    public function scenarioWriteOnce();
+
+    /**
+     * Set scenario to static::SCENARIO_MERGE
+     * @return ChainDependency
+     */
+    public function scenarioMerge();
+
+    /**
+     * Set scenario
+     * @param string $scenario
+     * @return ChainDependency
+     */
+    public function setScenario($scenario);
+
+    /**
+     * Set type to static::TYPE_ARBITRARY
+     * @return ChainDependency
+     */
+    public function typeArbitrary();
+
+    /**
+     * Set type to static::TYPE_DEFINED_ONLY
+     * @return ChainDependency
+     */
+    public function typeDefinedOnly();
+
+    /**
+     * Set type
+     * @param string $type
+     * @return ChainDependency
+     */
+    public function setType($type);
 }
