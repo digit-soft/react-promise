@@ -6,10 +6,13 @@ use React\Promise\CancellationQueue;
 use React\Promise\ExtendedPromiseInterface;
 use React\Promise\PromiseInterface;
 
-function resolve($promiseOrValue = null, ChainDependencyInterface $chainDependency = null)
+function resolve($promiseOrValue = null, ChainDependencyInterface &$chainDependency = null)
 {
     /** @var $promiseOrValue ExtendedPromiseInterface */
     if ($promiseOrValue instanceof ExtendedPromiseInterface) {
+        if($promiseOrValue instanceof PromiseWithDependenciesInterface) {
+            $promiseOrValue->chainDependency = $chainDependency;
+        }
         return $promiseOrValue;
     }
 
