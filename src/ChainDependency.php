@@ -1,12 +1,14 @@
 <?php
 
 namespace DigitSoft\Promise;
+use app\base\Arrayable;
+use Traversable;
 
 /**
  * Class ChainDependency. Fully sync package.
  * @package DigitSoft\Promise
  */
-class ChainDependency implements ChainDependencyInterface
+class ChainDependency implements ChainDependencyInterface, \IteratorAggregate, \Countable
 {
     public $scenario            = self::SCENARIO_OVERWRITE;
     public $type                = self::TYPE_ARBITRARY;
@@ -218,5 +220,29 @@ class ChainDependency implements ChainDependencyInterface
             if(is_object($arguments[$i]) && $arguments[$i] instanceof ChainDependencyInterface) return $arguments[$i];
         }
         return null;
+    }
+
+    /**
+     * Retrieve an external iterator
+     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+     * @return Traversable An instance of an object implementing Iterator or Traversable
+     * @since 5.0.0
+     */
+    public function getIterator()
+    {
+        $iterator = new \ArrayIterator($this->dependencies);
+        return $iterator;
+    }
+
+    /**
+     * Count elements of an object
+     * @link http://php.net/manual/en/countable.count.php
+     * @return int The custom count as an integer.
+     * The return value is cast to an integer.
+     * @since 5.1.0
+     */
+    public function count()
+    {
+        return count($this->dependencies);
     }
 }

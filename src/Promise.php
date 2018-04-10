@@ -5,7 +5,7 @@ namespace DigitSoft\Promise;
 use React\Promise\ExtendedPromiseInterface;
 use React\Promise\LazyPromise;
 
-class Promise implements ExtendedPromiseInterface
+class Promise implements ExtendedPromiseInterface, PromiseWithDependenciesInterface
 {
     private $canceller;
     /** @var FulfilledPromise|RejectedPromise */
@@ -43,11 +43,13 @@ class Promise implements ExtendedPromiseInterface
     public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null !== $this->result) {
+            //$this->mergeChainDependencies($this->chainDependency, $this->result->chainDependency);
+            $this->result->chainDependency = $this->chainDependency;
             return $this->result->then($onFulfilled, $onRejected, $onProgress);
         }
 
         if (null === $this->canceller) {
-            return new static($this->resolver($onFulfilled, $onRejected, $onProgress));
+            return new static($this->resolver($onFulfilled, $onRejected, $onProgress), null, $this->chainDependency);
         }
 
         $this->requiredCancelRequests++;
@@ -292,6 +294,17 @@ class Promise implements ExtendedPromiseInterface
             $this->reject($e);
         } catch (\Exception $e) {
             $this->reject($e);
+        }
+    }
+
+    /**
+     * @param ChainDependencyInterface $dep
+     * @param ChainDependencyInterface $dep2
+     */
+    private function mergeChainDependencies(&$dep, $dep2) {
+        foreach ($dep2 as $key => $value) {
+            echo $key . "\n";
+            $dep->addDependency($value, $key);
         }
     }
 }

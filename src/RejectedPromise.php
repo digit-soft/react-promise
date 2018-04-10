@@ -7,7 +7,7 @@ use React\Promise\ExtendedPromiseInterface;
 use React\Promise\PromiseInterface;
 use React\Promise\UnhandledRejectionException;
 
-class RejectedPromise implements ExtendedPromiseInterface, CancellablePromiseInterface
+class RejectedPromise implements ExtendedPromiseInterface, CancellablePromiseInterface, PromiseWithDependenciesInterface
 {
     private $reason;
 
