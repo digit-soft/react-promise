@@ -22,7 +22,8 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "DiSoft\\Promise\\": "src/"
-        }
+            "DigitSoft\\Promise\\": "src/"
+        },
+        "files": [ "src/functions_include.php" ]
     }
 }
