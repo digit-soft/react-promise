@@ -9,10 +9,10 @@ use React\Promise\PromiseInterface;
 function resolve($promiseOrValue = null, ChainDependencyInterface &$chainDependency = null)
 {
     /** @var $promiseOrValue ExtendedPromiseInterface */
+    if($promiseOrValue instanceof PromiseWithDependenciesInterface && isset($chainDependency)) {
+        _mergeDependencies($chainDependency, $promiseOrValue->chainDependency, true);
+    }
     if ($promiseOrValue instanceof ExtendedPromiseInterface) {
-        if($promiseOrValue instanceof PromiseWithDependenciesInterface) {
-            $promiseOrValue->chainDependency = $chainDependency;
-        }
         return $promiseOrValue;
     }
 
@@ -251,4 +251,19 @@ function _checkTypehint(callable $callback, $object)
     }
 
     return $expectedException->getClass()->isInstance($object);
+}
+
+/**
+ * Merge dependencies
+ * @param ChainDependencyInterface $dep
+ * @param ChainDependencyInterface $dep2
+ * @param bool $reassign
+ */
+function _mergeDependencies(&$dep, &$dep2, $reassign = false) {
+    if($dep === null || $dep2 === null) return;
+    foreach ($dep2 as $key => $value) {
+        echo $key . "\n";
+        $dep->addDependency($value, $key);
+    }
+    if($reassign) $dep2 = $dep;
 }
