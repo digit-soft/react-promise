@@ -8,7 +8,7 @@ use React\Promise\LazyPromise;
 class Promise implements ExtendedPromiseInterface
 {
     private $canceller;
-    /** @var ExtendedPromiseInterface */
+    /** @var FulfilledPromise|RejectedPromise */
     private $result;
 
     private $handlers = [];

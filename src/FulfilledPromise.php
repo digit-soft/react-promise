@@ -31,11 +31,11 @@ class FulfilledPromise implements ExtendedPromiseInterface, CancellablePromiseIn
         }
 
         try {
-            return resolve($onFulfilled($this->value, $this->chainDependency));
+            return resolve($onFulfilled($this->value, $this->chainDependency), $this->chainDependency);
         } catch (\Throwable $exception) {
-            return new RejectedPromise($exception);
+            return new RejectedPromise($exception, $this->chainDependency);
         } catch (\Exception $exception) {
-            return new RejectedPromise($exception);
+            return new RejectedPromise($exception, $this->chainDependency);
         }
     }
 

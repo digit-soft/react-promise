@@ -32,7 +32,7 @@ class RejectedPromise implements ExtendedPromiseInterface, CancellablePromiseInt
         }
 
         try {
-            return \app\base\promise\resolve($onRejected($this->reason, $this->chainDependency));
+            return resolve($onRejected($this->reason, $this->chainDependency));
         } catch (\Throwable $exception) {
             return new RejectedPromise($exception, $this->chainDependency);
         } catch (\Exception $exception) {
