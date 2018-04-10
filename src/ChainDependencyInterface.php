@@ -93,4 +93,30 @@ interface ChainDependencyInterface
      * @return ChainDependency
      */
     public function setType($type);
+
+
+    /**
+     * Get dependency from function arguments chain instance
+     * @param array $arguments
+     * @param string $key
+     * @param mixed $defaultValue
+     * @return mixed|null
+     */
+    public static function getDependencyFromArgs($arguments = [], $key = null, $defaultValue = null);
+
+    /**
+     * Add dependency to chain instance from function arguments
+     * @param array  $arguments
+     * @param mixed  $value
+     * @param string $key
+     * @return ChainDependencyInterface|null
+     */
+    public static function addDependencyToArgs($arguments = [], $value, $key = null);
+
+    /**
+     * Get instance from function arguments
+     * @param array $arguments
+     * @return ChainDependencyInterface|null
+     */
+    public static function instanceFromArguments($arguments = []);
 }

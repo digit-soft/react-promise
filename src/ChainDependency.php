@@ -179,4 +179,44 @@ class ChainDependency implements ChainDependencyInterface
         }
         return $this;
     }
+
+    /**
+     * Get dependency from function arguments chain instance
+     * @param array $arguments
+     * @param string $key
+     * @param mixed $defaultValue
+     * @return mixed|null
+     */
+    public static function getDependencyFromArgs($arguments = [], $key = null, $defaultValue = null) {
+        if($key === null) return null;
+        /** @var ChainDependencyInterface $instance */
+        if(($instance = static::instanceFromArguments($arguments)) === null) return null;
+        return $instance->getDependency($key, $defaultValue);
+    }
+
+    /**
+     * Add dependency to chain instance from function arguments
+     * @param array  $arguments
+     * @param mixed  $value
+     * @param string $key
+     * @return ChainDependencyInterface|null
+     */
+    public static function addDependencyToArgs($arguments = [], $value, $key = null) {
+        /** @var ChainDependencyInterface $instance */
+        if(($instance = static::instanceFromArguments($arguments)) === null) return null;
+        return $instance->addDependency($value, $key);
+    }
+
+    /**
+     * Get instance from function arguments
+     * @param array $arguments
+     * @return ChainDependencyInterface|null
+     */
+    public static function instanceFromArguments($arguments = []) {
+        $arguments = array_values($arguments);
+        for ($i = 0; $i < count($arguments); $i++) {
+            if(is_object($arguments[$i]) && $arguments[$i] instanceof ChainDependencyInterface) return $arguments[$i];
+        }
+        return null;
+    }
 }
