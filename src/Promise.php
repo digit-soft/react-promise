@@ -43,8 +43,9 @@ class Promise implements ExtendedPromiseInterface, PromiseWithDependenciesInterf
     public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null !== $this->result) {
-            //$this->mergeChainDependencies($this->chainDependency, $this->result->chainDependency);
-            $this->result->chainDependency = $this->chainDependency;
+            if($this->result instanceof PromiseWithDependenciesInterface) {
+                _mergeDependencies($this->chainDependency, $this->result->chainDependency, true);
+            }
             return $this->result->then($onFulfilled, $onRejected, $onProgress);
         }
 
@@ -294,17 +295,6 @@ class Promise implements ExtendedPromiseInterface, PromiseWithDependenciesInterf
             $this->reject($e);
         } catch (\Exception $e) {
             $this->reject($e);
-        }
-    }
-
-    /**
-     * @param ChainDependencyInterface $dep
-     * @param ChainDependencyInterface $dep2
-     */
-    private function mergeChainDependencies(&$dep, $dep2) {
-        foreach ($dep2 as $key => $value) {
-            echo $key . "\n";
-            $dep->addDependency($value, $key);
         }
     }
 }
