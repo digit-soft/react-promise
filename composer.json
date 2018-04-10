@@ -17,7 +17,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.0.0",
-        "react/promise": "~2.5.0"
+        "react/promise": "~2"
     },
     "require-dev": {},
     "autoload": {
