@@ -23,10 +23,5 @@
         "psr-4": {
             "disoft\\promise\\": ""
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
-        },
     }
 }
