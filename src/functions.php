@@ -11,8 +11,6 @@ function resolve($promiseOrValue = null, ChainDependencyInterface &$chainDepende
     /** @var $promiseOrValue ExtendedPromiseInterface */
     if($promiseOrValue instanceof PromiseWithDependenciesInterface && isset($chainDependency)) {
         _mergeDependencies($chainDependency, $promiseOrValue->chainDependency, true);
-    }
-    if ($promiseOrValue instanceof ExtendedPromiseInterface) {
         return $promiseOrValue;
     }
 
