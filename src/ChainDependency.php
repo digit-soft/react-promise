@@ -1,8 +1,6 @@
 <?php
 
 namespace DigitSoft\Promise;
-use app\base\Arrayable;
-use Traversable;
 
 /**
  * Class ChainDependency. Fully sync package.
@@ -225,7 +223,7 @@ class ChainDependency implements ChainDependencyInterface, \IteratorAggregate, \
     /**
      * Retrieve an external iterator
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return Traversable An instance of an object implementing Iterator or Traversable
+     * @return \Traversable An instance of an object implementing Iterator or Traversable
      * @since 5.0.0
      */
     public function getIterator()
